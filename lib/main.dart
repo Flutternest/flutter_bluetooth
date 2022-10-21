@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_bluetooth/screens/bluetooth_off_screen.dart';
+import 'package:flutter_bluetooth/screens/find_device_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Bluetoothexample());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Bluetoothexample extends StatelessWidget {
+  const Bluetoothexample({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+      title: "Flutter Bluetooth Example",
+      home: FlutterBlueShow(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class FlutterBlueShow extends StatelessWidget {
+  const FlutterBlueShow({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: StreamBuilder(
+        stream: FlutterBluePlus.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (context, snapshot) {
+          final state = snapshot.data;
+          if (state == BluetoothState.on) {
+            return FindDeviceScreen(); //Bluetooth Off
+          }
+          return BluetoothOffScreen(); //Bluetooth On
+        },
+      ),
+    );
   }
 }
-
